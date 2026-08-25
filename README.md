@@ -1,84 +1,59 @@
-﻿# logscope-c
+# logscope-c
 
-`logscope-c` — небольшая консольная утилита на C для анализа текстовых логов.
-Она читает файл, распознает уровни сообщений, фильтрует записи и выводит
-сводную статистику.
+`logscope-c` is a small C command-line log analyzer. It reads plain-text logs, parses severity levels, filters records, and prints summary statistics.
 
-Проект сделан как компактный практический C/Git/Linux-проект для заявки на
-open-source internship. Английская версия описания для публикации на GitHub:
-[README.en.md](README.en.md).
+**Status: completed educational utility.**
 
-## Возможности
+## Features
 
-- Разбирает строки с уровнями `INFO`, `WARN`, `ERROR` и `DEBUG`.
-- Считает общее число записей и количество записей по каждому уровню.
-- Фильтрует вывод по уровню через `--level`.
-- Показывает самые частые сообщения через `--top N`.
-- Пропускает пустые строки и считает некорректные строки как malformed.
-- Использует динамические массивы, структуры, файловый ввод-вывод, парсинг строк
-  и сборку через `Makefile`.
+- Parses log lines with `INFO`, `WARN`, `ERROR`, and `DEBUG` levels.
+- Counts total records and records by severity.
+- Filters output by severity with `--level`.
+- Prints the top repeated messages with `--top N`.
+- Handles malformed lines without crashing.
+- Uses dynamic arrays, structs, file I/O, string parsing, and a Makefile build.
 
-## Формат логов
+## Log format
 
-Ожидаемый формат строки:
+The parser expects lines in this shape:
 
 ```text
 2026-04-29T10:15:00Z INFO api request completed
 2026-04-29T10:15:01Z ERROR db connection failed
 ```
 
-Первое поле считается timestamp, второе — уровнем сообщения, остальная часть
-строки — текстом сообщения.
+The first field is treated as a timestamp, the second as a severity level, and the rest of the line as the message. Malformed lines are counted and skipped.
 
-Некорректные строки считаются и пропускаются.
+## Build
 
-## Сборка
-
-На Linux или в среде с `make` и C-компилятором:
+On Linux or another environment with `make` and a C compiler:
 
 ```sh
 make
 ```
 
-Ручная сборка:
+Manual build:
 
 ```sh
 cc -std=c11 -Wall -Wextra -pedantic -O2 -o logscope src/logscope.c
 ```
 
-Сборка MSVC из Visual Studio Developer Command Prompt:
+MSVC build from a Visual Studio Developer Command Prompt:
 
 ```bat
 cl /W4 /std:c11 /Fe:logscope.exe src\logscope.c
 ```
 
-## Использование
-
-Показать сводку:
+## Usage
 
 ```sh
 ./logscope examples/sample.log
-```
-
-Отфильтровать записи:
-
-```sh
 ./logscope --level ERROR examples/sample.log
-```
-
-Показать самые частые сообщения:
-
-```sh
 ./logscope --top 3 examples/sample.log
-```
-
-Совместить опции:
-
-```sh
 ./logscope --level WARN --top 5 examples/sample.log
 ```
 
-## Пример вывода
+## Example output
 
 ```text
 File: examples/sample.log
@@ -92,15 +67,10 @@ By level:
   ERROR: 5
 ```
 
-## Что демонстрирует проект
+## What this demonstrates
 
-Цель проекта — показать базовое владение C на реалистичной CLI-задаче:
-
-- чтение файла построчно;
-- парсинг структурированного текста;
-- использование `struct` и `enum`;
-- расширение динамических массивов через `malloc`/`realloc`;
-- обработку аргументов командной строки;
-- понятные сообщения об ошибках;
-- документацию по сборке и запуску.
-
+- Reading files line by line.
+- Parsing structured text with `struct` and `enum`.
+- Growing arrays dynamically with `malloc`/`realloc`.
+- Validating command-line arguments and reporting errors clearly.
+- Building a small portable C utility with Make and MSVC instructions.
